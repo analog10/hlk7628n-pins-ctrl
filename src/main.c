@@ -24,7 +24,8 @@ int main(int argc, char **argv)
 
 	// read the command argument
 	if (argc >= 2) {
-		if (strcmp(argv[1], "gpiomux") == 0 || strcmp(argv[1], "pinmux") == 0) {
+		
+		if (!strcmp(argv[1], "gpiomux") || !strcmp(argv[1], "pinmux")) {
 			if (gpiomux_mmap_open() == EXIT_FAILURE) {
 				return EXIT_FAILURE;
 			}
@@ -41,7 +42,7 @@ int main(int argc, char **argv)
 
 			gpiomux_mmap_close();		
 		}
-		else if (strcmp(argv[1], "refclk") == 0) {
+		else if (!strcmp(argv[1], "refclk")) {
 			if (refclk_mmap_open() == EXIT_FAILURE) {
 				return EXIT_FAILURE;
 			}
