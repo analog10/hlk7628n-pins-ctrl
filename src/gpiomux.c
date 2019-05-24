@@ -26,14 +26,14 @@ int gpiomux_set(char *group, char *name)
 	int id;
 
 	for (id = 0; id < _O2_NUM_GPIO_MUX; id ++)
-		if (!strcmp(omega2GpioMux[id].name, group))
+		if (!strcmp(GpioMux[id].name, group))
 			break;
 
 	if (id < _O2_NUM_GPIO_MUX) for (i = 0; i < 4; i++) {
-		if (!omega2GpioMux[id].func[i] || strcmp(omega2GpioMux[id].func[i], name))
+		if (!GpioMux[id].func[i] || strcmp(GpioMux[id].func[i], name))
 			continue;
-		__gpiomux_set(omega2GpioMux[id].mask, omega2GpioMux[id].shift, i);
-		fprintf(stderr, "set gpiomux %s -> %s\n", omega2GpioMux[id].name, name);
+		__gpiomux_set(GpioMux[id].mask, GpioMux[id].shift, i);
+		printf("set gpiomux %s -> %s\n", GpioMux[id].name, name);
 		return EXIT_SUCCESS;
 	}
 	fprintf(stderr, "unknown group/function combination\n");
@@ -50,19 +50,19 @@ int gpiomux_get(void)
 		unsigned int val;
 		int i;
 
-		if (omega2GpioMux[id].shift < MT76X8_SYSCTL_REGISTERS_WIDTH)
-			val = (gpio1_mode >> omega2GpioMux[id].shift) & omega2GpioMux[id].mask;
+		if (GpioMux[id].shift < MT76X8_SYSCTL_REGISTERS_WIDTH)
+			val = (gpio1_mode >> GpioMux[id].shift) & GpioMux[id].mask;
 		else
-			val = (gpio2_mode >> (omega2GpioMux[id].shift - MT76X8_SYSCTL_REGISTERS_WIDTH)) & omega2GpioMux[id].mask;
+			val = (gpio2_mode >> (GpioMux[id].shift - MT76X8_SYSCTL_REGISTERS_WIDTH)) & GpioMux[id].mask;
 
-		printf("Group %s - ", omega2GpioMux[id].name);
+		printf("Group %s - ", GpioMux[id].name);
 		for (i = 0; i < 4; i++) {
-			if (!omega2GpioMux[id].func[i])
+			if (!GpioMux[id].func[i])
 				continue;
 			if (i == val)
-				printf("[%s] ", omega2GpioMux[id].func[i]);
+				printf("[%s] ", GpioMux[id].func[i]);
 			else
-				printf("%s ", omega2GpioMux[id].func[i]);
+				printf("%s ", GpioMux[id].func[i]);
 		}
 		printf("\n");
 	}

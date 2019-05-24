@@ -8,11 +8,15 @@ void usage (char* progname) {
 			"  Commands:\n"
 			"    get                list the current GPIO muxing configuration\n"
 			"    set <group> <role> set the role for the specified GPIO signal group\n"
-
 			"\n  refclk\n\n"
 			"  Commands:\n"
 			"    get                   display the current refclk setting\n"
-			"    set <frequency (MHz)> set the refclk to the specified frequency if possible\n",
+			"    set <frequency (MHz)> set the refclk to the specified frequency if possible\n"
+			"\n  agpio\n\n"
+			"  Commands:\n"
+			"    get                 display the current agpio setting\n"
+			"    set <group> <state> set the state for the specified AGPIO group\n"
+			"",
 			progname
 	);
 }
@@ -40,7 +44,7 @@ int main(int argc, char **argv)
 				usage(*argv);
 			}
 
-			gpiomux_mmap_close();		
+			gpiomux_mmap_close();
 		}
 		else if (!strcmp(argv[1], "refclk")) {
 			if (refclk_mmap_open() == EXIT_FAILURE) {
@@ -58,6 +62,23 @@ int main(int argc, char **argv)
 			}
 
 			refclk_mmap_close();		
+		}
+		else if (!strcmp(argv[1], "agpio")) {
+			if (agpio_mmap_open() == EXIT_FAILURE) {
+				return EXIT_FAILURE;
+			}
+
+			if (argc >= 5 && !strcmp(argv[2], "set")) {
+				status = agpio_set(argv[3], argv[4]);
+			} 
+			else if (argc >= 3 && !strcmp(argv[2], "get")) {
+				status = agpio_get();
+			} 
+			else {
+				usage(*argv);
+			}
+
+			agpio_mmap_close();
 		}
 		else {
 			usage(*argv);
