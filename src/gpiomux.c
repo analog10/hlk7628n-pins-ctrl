@@ -6,18 +6,18 @@ static int gpio_mmap_fd = 0;
 
 void __gpiomux_set(unsigned int mask, unsigned int shift, unsigned int val)
 {
-	volatile uint32_t *reg = (volatile uint32_t*) (gpio_mmap_reg + 0x60);
+	volatile uint32_t *gpio_mode = (volatile uint32_t*) (gpio_mmap_reg + MT76X8_SYSCTL_GPIO1_MODE);
 	unsigned int v;
 
-	if (shift > 31) {
-		shift -= 32;
-		reg++;
+	if (shift > (MT76X8_SYSCTL_REGISTERS_WIDTH - 1)) {
+		shift -= MT76X8_SYSCTL_REGISTERS_WIDTH;
+		gpio_mode++;
 	}
 
-	v = *reg;
+	v = *gpio_mode;
 	v &= ~(mask << shift);
 	v |= (val << shift);
-	*(volatile uint32_t*) (reg) = v;
+	*(volatile uint32_t*) (gpio_mode) = v;
 }
 
 int gpiomux_set(char *group, char *name)
@@ -42,29 +42,29 @@ int gpiomux_set(char *group, char *name)
 
 int gpiomux_get(void)
 {
-	unsigned int reg = *(volatile uint32_t*) (gpio_mmap_reg + 0x60);
-	unsigned int reg2 = *(volatile uint32_t*) (gpio_mmap_reg + 0x64);
+	unsigned int gpio1_mode = *(volatile uint32_t*) (gpio_mmap_reg + MT76X8_SYSCTL_GPIO1_MODE);
+	unsigned int gpio2_mode = *(volatile uint32_t*) (gpio_mmap_reg + MT76X8_SYSCTL_GPIO2_MODE);
 	int id;
 
 	for (id = 0; id < _O2_NUM_GPIO_MUX; id ++) {
 		unsigned int val;
 		int i;
 
-		if (omega2GpioMux[id].shift < 32)
-			val = (reg >> omega2GpioMux[id].shift) & omega2GpioMux[id].mask;
+		if (omega2GpioMux[id].shift < MT76X8_SYSCTL_REGISTERS_WIDTH)
+			val = (gpio1_mode >> omega2GpioMux[id].shift) & omega2GpioMux[id].mask;
 		else
-			val = (reg2 >> (omega2GpioMux[id].shift - 32)) & omega2GpioMux[id].mask;
+			val = (gpio2_mode >> (omega2GpioMux[id].shift - MT76X8_SYSCTL_REGISTERS_WIDTH)) & omega2GpioMux[id].mask;
 
-		fprintf(stderr, "Group %s - ", omega2GpioMux[id].name);
+		printf("Group %s - ", omega2GpioMux[id].name);
 		for (i = 0; i < 4; i++) {
 			if (!omega2GpioMux[id].func[i])
 				continue;
 			if (i == val)
-				fprintf(stderr, "[%s] ", omega2GpioMux[id].func[i]);
+				printf("[%s] ", omega2GpioMux[id].func[i]);
 			else
-				fprintf(stderr, "%s ", omega2GpioMux[id].func[i]);
+				printf("%s ", omega2GpioMux[id].func[i]);
 		}
-		fprintf(stderr, "\n");
+		printf("\n");
 	}
 
 	return EXIT_SUCCESS;
@@ -78,7 +78,7 @@ int gpiomux_mmap_open(void)
 	}
 
 	gpio_mmap_reg = (uint8_t*) mmap(NULL, 1024, PROT_READ | PROT_WRITE,
-		MAP_FILE | MAP_SHARED, gpio_mmap_fd, 0x10000000);
+		MAP_FILE | MAP_SHARED, gpio_mmap_fd, MT76X8_SYSCTL_BASE);
 	if (gpio_mmap_reg == MAP_FAILED) {
 		perror("failed to mmap");
 		fprintf(stderr, "failed to mmap");
