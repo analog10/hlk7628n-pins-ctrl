@@ -13,6 +13,7 @@
 
 #include <omega2_ctrl_types.h>
 
+#include <agpio.h>
 #include <gpiomux.h>
 #include <refclk.h>
 
