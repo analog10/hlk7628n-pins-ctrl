@@ -13,6 +13,7 @@
 #include <fcntl.h>
 
 #include <omega2_ctrl_types.h>
+#include <mt76x8_mem.h>
 
 
 int 		refclk_set						(unsigned int rate);
