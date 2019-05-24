@@ -1,35 +1,20 @@
 #include <main.h>
 
 void usage (char* progname) {
-	fprintf(stderr, "\n");
-	fprintf(stderr, "Usage: %s gpiomux get\n", progname);
-	fprintf(stderr, "\n");
-	fprintf(stderr, "Functionality:\n");
-	fprintf(stderr, "\tList the current GPIO muxing configuration\n");
-	fprintf(stderr, "\n");
+	fprintf(stderr,
+			"Usage: %s <module> <command> [<arguments>]\n\n"
+			"Supported modules:\n"
+			"  gpiomux\n\n"
+			"  Commands:\n"
+			"    get                list the current GPIO muxing configuration\n"
+			"    set <group> <role> set the role for the specified GPIO signal group\n"
 
-	fprintf(stderr, "\n");
-	fprintf(stderr, "Usage: %s gpiomux set <GPIO group> <mux setting>\n", progname);
-	fprintf(stderr, "\n");
-	fprintf(stderr, "Functionality:\n");
-	fprintf(stderr, "\tSet the GPIO muxing for the specified GPIO signal group\n");
-	fprintf(stderr, "\n");
-
-	fprintf(stderr, "\n");
-	
-	fprintf(stderr, "\n");
-	fprintf(stderr, "Usage: %s refclk get\n", progname);
-	fprintf(stderr, "\n");
-	fprintf(stderr, "Functionality:\n");
-	fprintf(stderr, "\tDisplay the current refclk setting\n");
-	fprintf(stderr, "\n");
-
-	fprintf(stderr, "\n");
-	fprintf(stderr, "Usage: %s refclk set <frequency (MHz)>\n", progname);
-	fprintf(stderr, "\n");
-	fprintf(stderr, "Functionality:\n");
-	fprintf(stderr, "\tSet the refclk to the specified frequency if possible\n");
-	fprintf(stderr, "\n");
+			"\n  refclk\n\n"
+			"  Commands:\n"
+			"    get                   display the current refclk setting\n"
+			"    set <frequency (MHz)> set the refclk to the specified frequency if possible\n",
+			progname
+	);
 }
 
 int main(int argc, char **argv)
