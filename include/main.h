@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -16,6 +17,7 @@
 #include <agpio.h>
 #include <gpiomux.h>
 #include <refclk.h>
+#include <regaccess.h>
 
 
 #endif // _OMEGA2_CTRL_H_

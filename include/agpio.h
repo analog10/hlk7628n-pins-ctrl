@@ -7,20 +7,13 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
 #include <omega2_ctrl_types.h>
 #include <mt76x8_mem.h>
+#include <regaccess.h>
 
 // functions
 int 			agpio_set					(char *group, char *name);
 int 			agpio_get					(void);
-
-int 			agpio_mmap_open			(void);
-void 			agpio_mmap_close			(void);
 
 #define _MAX_FUNC	16
 

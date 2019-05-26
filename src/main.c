@@ -28,12 +28,11 @@ int main(int argc, char **argv)
 
 	// read the command argument
 	if (argc >= 2) {
-		
-		if (!strcmp(argv[1], "gpiomux") || !strcmp(argv[1], "pinmux")) {
-			if (gpiomux_mmap_open() == EXIT_FAILURE) {
+		if (mmap_open() == EXIT_FAILURE) {
 				return EXIT_FAILURE;
 			}
-
+		
+		if (!strcmp(argv[1], "gpiomux") || !strcmp(argv[1], "pinmux")) {
 			if (argc >= 5 && !strcmp(argv[2], "set")) {
 				status = gpiomux_set(argv[3], argv[4]);
 			} 
@@ -43,14 +42,8 @@ int main(int argc, char **argv)
 			else {
 				usage(*argv);
 			}
-
-			gpiomux_mmap_close();
 		}
 		else if (!strcmp(argv[1], "refclk")) {
-			if (refclk_mmap_open() == EXIT_FAILURE) {
-				return EXIT_FAILURE;
-			}
-
 			if (argc >= 4 && !strcmp(argv[2], "set")) {
 				status = refclk_set(atoi(argv[3]));
 			} 
@@ -60,14 +53,8 @@ int main(int argc, char **argv)
 			else {
 				usage(*argv);
 			}
-
-			refclk_mmap_close();		
 		}
 		else if (!strcmp(argv[1], "agpio")) {
-			if (agpio_mmap_open() == EXIT_FAILURE) {
-				return EXIT_FAILURE;
-			}
-
 			if (argc >= 5 && !strcmp(argv[2], "set")) {
 				status = agpio_set(argv[3], argv[4]);
 			} 
@@ -77,12 +64,12 @@ int main(int argc, char **argv)
 			else {
 				usage(*argv);
 			}
-
-			agpio_mmap_close();
 		}
 		else {
 			usage(*argv);
 		}
+
+		mmap_close();
 	} 
 	else {
 		usage(*argv);

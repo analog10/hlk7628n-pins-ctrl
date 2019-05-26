@@ -7,20 +7,13 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
 #include <omega2_ctrl_types.h>
 #include <mt76x8_mem.h>
+#include <regaccess.h>
 
 // functions
 int 			gpiomux_set					(char *group, char *name);
 int 			gpiomux_get					(void);
-
-int 			gpiomux_mmap_open			(void);
-void 			gpiomux_mmap_close			(void);
 
 // structure
 static struct gpiomux {

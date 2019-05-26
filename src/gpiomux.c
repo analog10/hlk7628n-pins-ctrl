@@ -1,12 +1,9 @@
 #include <gpiomux.h>
 
 
-static uint8_t* gpio_mmap_reg = NULL;
-static int gpio_mmap_fd = 0;
-
 void __gpiomux_set(unsigned int mask, unsigned int shift, unsigned int val)
 {
-	volatile uint32_t *gpio_mode = (volatile uint32_t*) (gpio_mmap_reg + MT76X8_SYSCTL_GPIO1_MODE);
+	volatile uint32_t *gpio_mode = (volatile uint32_t*) (mmap_reg + MT76X8_SYSCTL_GPIO1_MODE);
 	unsigned int v;
 
 	if (shift > (MT76X8_SYSCTL_REGISTERS_WIDTH - 1)) {
@@ -42,8 +39,8 @@ int gpiomux_set(char *group, char *name)
 
 int gpiomux_get(void)
 {
-	unsigned int gpio1_mode = *(volatile uint32_t*) (gpio_mmap_reg + MT76X8_SYSCTL_GPIO1_MODE);
-	unsigned int gpio2_mode = *(volatile uint32_t*) (gpio_mmap_reg + MT76X8_SYSCTL_GPIO2_MODE);
+	unsigned int gpio1_mode = *(volatile uint32_t*) (mmap_reg + MT76X8_SYSCTL_GPIO1_MODE);
+	unsigned int gpio2_mode = *(volatile uint32_t*) (mmap_reg + MT76X8_SYSCTL_GPIO2_MODE);
 	int id;
 
 	for (id = 0; id < _O2_NUM_GPIO_MUX; id ++) {
@@ -69,29 +66,3 @@ int gpiomux_get(void)
 
 	return EXIT_SUCCESS;
 }
-
-int gpiomux_mmap_open(void)
-{
-	if ((gpio_mmap_fd = open(MMAP_PATH, O_RDWR)) < 0) {
-		fprintf(stderr, "unable to open mmap file");
-		return EXIT_FAILURE;
-	}
-
-	gpio_mmap_reg = (uint8_t*) mmap(NULL, 1024, PROT_READ | PROT_WRITE,
-		MAP_FILE | MAP_SHARED, gpio_mmap_fd, MT76X8_SYSCTL_BASE);
-	if (gpio_mmap_reg == MAP_FAILED) {
-		perror("failed to mmap");
-		fprintf(stderr, "failed to mmap");
-		gpio_mmap_reg = NULL;
-		close(gpio_mmap_fd);
-		return EXIT_FAILURE;
-	}
-
-	return EXIT_SUCCESS;
-}
-
-void gpiomux_mmap_close(void) 
-{
-	close(gpio_mmap_fd);		
-}
-

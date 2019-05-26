@@ -7,19 +7,12 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
 #include <omega2_ctrl_types.h>
 #include <mt76x8_mem.h>
+#include <regaccess.h>
 
-
+// functions
 int 		refclk_set						(unsigned int rate);
 int 		refclk_get						(void);
-
-int 		refclk_mmap_open				(void);
-void 		refclk_mmap_close				(void);
 
 #endif // _REFCLK_H_
