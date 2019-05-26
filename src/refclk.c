@@ -5,16 +5,16 @@
 static unsigned int refclk_rates[] = { 40, 12, 25, 40, 48 };
 static char *refclk_names[] = { "xtal", "12", "25", "40", "48" };
 
-static uint8_t* refclk_mmap_reg = NULL;
+static uint8_t* refclk_mmap_clkcfg0 = NULL;
 static int refclk_mmap_fd = 0;
 
 void __refclk_set(unsigned int val)
 {
-	unsigned int reg = *(volatile uint32_t*) (refclk_mmap_reg + 0x2c);
+	unsigned int clkcfg0 = *(volatile uint32_t*) (refclk_mmap_clkcfg0 + 0x2c);
 
-	reg &= ~(0x7 << 9);
-	reg |= (val << 9);
-	*(volatile uint32_t*) (refclk_mmap_reg + 0x2c) = reg;
+	clkcfg0 &= ~(0x7 << 9);
+	clkcfg0 |= (val << 9);
+	*(volatile uint32_t*) (refclk_mmap_clkcfg0 + 0x2c) = clkcfg0;
 }
 
 int refclk_set(unsigned int rate)
@@ -35,15 +35,15 @@ int refclk_set(unsigned int rate)
 
 int refclk_get(void)
 {
-	unsigned int reg = *(volatile uint32_t*) (refclk_mmap_reg + 0x2c);
+	unsigned int clkcfg0 = *(volatile uint32_t*) (refclk_mmap_clkcfg0 + MT76X8_SYSCTL_CLKCFG0);
 	int id;
 
-	reg >>= 9;
-	reg &= 7;
+	clkcfg0 >>= 9;
+	clkcfg0 &= 7;
 
 	fprintf(stderr, "refclk rates in MHz: ");
         for (id = 0; id < __CLK_MAX; id ++) {
-		if (id == reg)
+		if (id == clkcfg0)
 			fprintf(stderr, "[%s] ", refclk_names[id]);
 		else
 			fprintf(stderr, "%s ", refclk_names[id]);
@@ -59,12 +59,12 @@ int refclk_mmap_open(void)
 		return -1;
 	}
 
-	refclk_mmap_reg = (uint8_t*) mmap(NULL, 1024, PROT_READ | PROT_WRITE,
-		MAP_FILE | MAP_SHARED, refclk_mmap_fd, 0x10000000);
-	if (refclk_mmap_reg == MAP_FAILED) {
+	refclk_mmap_clkcfg0 = (uint8_t*) mmap(NULL, 1024, PROT_READ | PROT_WRITE,
+		MAP_FILE | MAP_SHARED, refclk_mmap_fd, MT76X8_SYSCTL_BASE);
+	if (refclk_mmap_clkcfg0 == MAP_FAILED) {
 		perror("foo");
 		fprintf(stderr, "failed to mmap");
-		refclk_mmap_reg = NULL;
+		refclk_mmap_clkcfg0 = NULL;
 		close(refclk_mmap_fd);
 		return -1;
 	}

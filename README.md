@@ -1,2 +1,2 @@
-# omega2ctrl
-Utility to control the Omega2's low-level hardware
+# hlk7688a2ctrl
+Utility to control the hlk7688a low-level hardware (pins assignment)

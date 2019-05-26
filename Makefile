@@ -22,7 +22,7 @@ CFLAGS := -g -lz # -Wall
 INC := $(shell find $(INCDIR) -maxdepth 1 -type d -exec echo -I {}  \;)
 
 # define specific binaries to create
-APP0 := omega2-ctrl
+APP0 := hlk7688a-pins-ctrl
 TARGET := $(BINDIR)/$(APP0)
 
 
