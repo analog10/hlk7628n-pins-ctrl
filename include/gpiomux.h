@@ -118,25 +118,25 @@ static struct gpiomux {
 	{
 		.name = "ephy1_led",
 		.func = { "ephy1_led", "gpio", "utif9", "jtag_jtdi" },
-		.shift = MT76X8_SYSCTL_REGISTERS_WIDTH + MT76X8_GPIO2_MODE_P0_LED_AN_MODE,
+		.shift = MT76X8_SYSCTL_REGISTERS_WIDTH + MT76X8_GPIO2_MODE_P1_LED_AN_MODE,
 		.mask = MT76X8_GPIO2_MODE_P0_LED_AN_MODE_MASK,
 	},
 	{
 		.name = "ephy2_led",
 		.func = { "ephy2_led", "gpio", "utif8", "jtag_jtms" },
-		.shift = MT76X8_SYSCTL_REGISTERS_WIDTH + MT76X8_GPIO2_MODE_P0_LED_AN_MODE,
+		.shift = MT76X8_SYSCTL_REGISTERS_WIDTH + MT76X8_GPIO2_MODE_P2_LED_AN_MODE,
 		.mask = MT76X8_GPIO2_MODE_P0_LED_AN_MODE_MASK,
 	},
 	{
 		.name = "ephy3_led",
 		.func = { "ephy3_led", "gpio", "utif7", "jtag_jtclk" },
-		.shift = MT76X8_SYSCTL_REGISTERS_WIDTH + MT76X8_GPIO2_MODE_P0_LED_AN_MODE,
+		.shift = MT76X8_SYSCTL_REGISTERS_WIDTH + MT76X8_GPIO2_MODE_P3_LED_AN_MODE,
 		.mask = MT76X8_GPIO2_MODE_P0_LED_AN_MODE_MASK,
 	},
 	{
 		.name = "ephy4_led",
 		.func = { "ephy4_led", "gpio", "utif6", "jtag_jtrst_n" },
-		.shift = MT76X8_SYSCTL_REGISTERS_WIDTH + MT76X8_GPIO2_MODE_P0_LED_AN_MODE,
+		.shift = MT76X8_SYSCTL_REGISTERS_WIDTH + MT76X8_GPIO2_MODE_P4_LED_AN_MODE,
 		.mask = MT76X8_GPIO2_MODE_P0_LED_AN_MODE_MASK,
 	},
 	{
